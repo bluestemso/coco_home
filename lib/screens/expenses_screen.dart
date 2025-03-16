@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../services/expense_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
@@ -19,8 +20,12 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: Replace with actual user ID from Firebase Auth
-    _expenseService = ExpenseService('user123');
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) {
+      // Sign in anonymously if no user is signed in
+      auth.signInAnonymously();
+    }
+    _expenseService = ExpenseService(auth.currentUser!.uid);
   }
 
   @override

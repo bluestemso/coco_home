@@ -13,6 +13,7 @@ Coco Home serves as a hub for busy, multi-family households.  Currently, it serv
  - Firebase: for cloud syncing and user authentication
  - Flex Color Scheme: for easy customization of color and text theme
  - Signals: for state management
+ - Super Editor: for the whiteboard canvas
  
 ## Target Platforms
  - iOS
