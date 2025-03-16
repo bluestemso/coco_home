@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'screens/home_screen.dart';
-import 'screens/expenses_screen.dart';
-// Import other screens when they're created
-// import 'screens/whiteboard_screen.dart';
+import 'widgets/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,11 +29,7 @@ class CocoHomeApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
-      routes: {
-        '/expenses': (context) => const ExpensesScreen(),
-        '/whiteboard': (context) => const Placeholder(), // Replace with WhiteboardScreen
-      },
+      home: const AuthWrapper(),
     );
   }
 }

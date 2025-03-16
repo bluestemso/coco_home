@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../services/expense_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../services/auth_service.dart';
 
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
@@ -12,6 +12,7 @@ class ExpensesScreen extends StatefulWidget {
 
 class _ExpensesScreenState extends State<ExpensesScreen> {
   late final ExpenseService _expenseService;
+  final _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _amountController = TextEditingController();
@@ -20,12 +21,12 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
   @override
   void initState() {
     super.initState();
-    final auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
-      // Sign in anonymously if no user is signed in
-      auth.signInAnonymously();
+    final userId = _authService.currentUserId;
+    if (userId == null) {
+      // Handle error - this shouldn't happen as we're wrapped in AuthWrapper
+      return;
     }
-    _expenseService = ExpenseService(auth.currentUser!.uid);
+    _expenseService = ExpenseService(userId);
   }
 
   @override
