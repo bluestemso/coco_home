@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'expenses_screen.dart';
 import 'whiteboard_screen.dart';
+import 'household_screen.dart';
+import 'family_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -14,6 +16,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _screens = const [
     ExpensesScreen(),
+    HouseholdScreen(),
+    FamilyScreen(),
     WhiteboardScreen(),
   ];
 
@@ -34,6 +38,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           NavigationDestination(
             icon: Icon(Icons.receipt_long),
             label: 'Expenses',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: 'Households',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.family_restroom),
+            label: 'Families',
           ),
           NavigationDestination(
             icon: Icon(Icons.note_alt),

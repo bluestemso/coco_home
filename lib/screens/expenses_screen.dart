@@ -90,147 +90,152 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Expense'),
-        content: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
+      builder: (BuildContext dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Add Expense'),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a description';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  labelText: 'Amount',
-                  prefixText: '\$',
+                TextFormField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(
+                    labelText: 'Amount',
+                    prefixText: '\$',
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an amount';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an amount';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              StreamBuilder<List<String>>(
-                stream: _expenseService.getCategories(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  }
+                const SizedBox(height: 16),
+                StreamBuilder<List<String>>(
+                  stream: _expenseService.getCategories(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    }
 
-                  final categories = snapshot.data!;
-                  
-                  return InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'Category',
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value: _selectedCategory,
-                            isExpanded: true,
-                            hint: const Text('Select Category'),
-                            items: categories.map((category) {
-                              return DropdownMenuItem(
-                                value: category,
-                                child: Text(category),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedCategory = value;
-                              });
-                            },
+                    final categories = snapshot.data!;
+                    
+                    return InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Category',
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButton<String>(
+                              value: _selectedCategory,
+                              isExpanded: true,
+                              hint: const Text('Select Category'),
+                              items: categories.map((category) {
+                                return DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setDialogState(() {
+                                  _selectedCategory = value;
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: _showAddCategoryDialog,
-                          tooltip: 'Add Category',
-                        ),
-                      ],
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              _showAddCategoryDialog();
+                            },
+                            tooltip: 'Add Category',
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: _paidBy,
+                  decoration: const InputDecoration(
+                    labelText: 'Paid by',
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'You',
+                      child: Text('You'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Alex',
+                      child: Text('Alex'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _paidBy = value!;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate() && _selectedCategory != null) {
+                  final amount = double.parse(_amountController.text);
+                  await _expenseService.addExpense(
+                    description: _descriptionController.text,
+                    amount: amount,
+                    paidBy: _paidBy,
+                    splitWith: _paidBy == 'You' ? 'Alex' : 'You',
+                    category: _selectedCategory!,
+                  );
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                  }
+                  _descriptionController.clear();
+                  _amountController.clear();
+                  _paidBy = 'You';
+                  _selectedCategory = null;
+                } else if (_selectedCategory == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please select or add a category'),
                     ),
                   );
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _paidBy,
-                decoration: const InputDecoration(
-                  labelText: 'Paid by',
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'You',
-                    child: Text('You'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Alex',
-                    child: Text('Alex'),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _paidBy = value!;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate() && _selectedCategory != null) {
-                final amount = double.parse(_amountController.text);
-                await _expenseService.addExpense(
-                  description: _descriptionController.text,
-                  amount: amount,
-                  paidBy: _paidBy,
-                  splitWith: _paidBy == 'You' ? 'Alex' : 'You',
-                  category: _selectedCategory!,
-                );
-                if (mounted) {
-                  Navigator.of(context).pop();
                 }
-                _descriptionController.clear();
-                _amountController.clear();
-                _paidBy = 'You';
-                _selectedCategory = null;
-              } else if (_selectedCategory == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please select or add a category'),
-                  ),
-                );
-              }
-            },
-            child: const Text('Add'),
-          ),
-        ],
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -242,12 +247,6 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _showAddExpenseDialog,
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -367,42 +366,47 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                             ? theme.colorScheme.primary.withValues(alpha: 40)
                             : theme.colorScheme.error.withValues(alpha: 40),
                           child: Icon(
-                            isOwed ? Icons.arrow_upward : Icons.arrow_downward,
+                            isOwed ? Icons.add_circle : Icons.remove_circle,
                             color: isOwed 
                               ? theme.colorScheme.primary
                               : theme.colorScheme.error,
                           ),
                         ),
-                        title: Text(expense.description),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        title: Row(
                           children: [
-                            Text(
-                              '${isOwed ? 'Owed by' : 'You owe'} ${isOwed ? expense.splitWith : expense.paidBy}',
-                            ),
-                            Text(
-                              expense.category,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.primary,
+                            Flexible(
+                              child: Text(
+                                expense.description,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
+                        ),
+                        subtitle: Text(
+                          _formatDate(expense.date),
+                          style: theme.textTheme.bodySmall,
                         ),
                         trailing: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '\$${(expense.amount / 2).toStringAsFixed(2)}',
+                              isOwed 
+                                ? '${expense.splitWith} owes you'
+                                : 'You owe ${expense.paidBy}',
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              isOwed 
+                                ? '\$${(expense.amount / 2).toStringAsFixed(2)}'
+                                : '(\$${(expense.amount / 2).toStringAsFixed(2)})',
                               style: theme.textTheme.titleMedium?.copyWith(
                                 color: isOwed 
                                   ? theme.colorScheme.primary
                                   : theme.colorScheme.error,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                            Text(
-                              _formatDate(expense.date),
-                              style: theme.textTheme.bodySmall,
                             ),
                           ],
                         ),
@@ -414,6 +418,10 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddExpenseDialog,
+        child: const Icon(Icons.add),
       ),
     );
   }

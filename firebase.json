@@ -1,1 +1,35 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"coco-home-698d0","appId":"1:786953078927:android:baa40faa3de045553288fa","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"coco-home-698d0","appId":"1:786953078927:ios:3e470988301e5c0e3288fa","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"coco-home-698d0","configurations":{"android":"1:786953078927:android:baa40faa3de045553288fa","ios":"1:786953078927:ios:3e470988301e5c0e3288fa","web":"1:786953078927:web:de12433b8eb1bf683288fa"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "coco-home-698d0",
+          "appId": "1:786953078927:android:baa40faa3de045553288fa",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "coco-home-698d0",
+          "appId": "1:786953078927:ios:3e470988301e5c0e3288fa",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "coco-home-698d0",
+          "configurations": {
+            "android": "1:786953078927:android:baa40faa3de045553288fa",
+            "ios": "1:786953078927:ios:3e470988301e5c0e3288fa",
+            "web": "1:786953078927:web:de12433b8eb1bf683288fa"
+          }
+        }
+      }
+    }
+  }
+}

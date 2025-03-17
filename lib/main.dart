@@ -3,6 +3,10 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'widgets/auth_wrapper.dart';
+import 'screens/expenses_screen.dart';
+import 'screens/whiteboard_screen.dart';
+import 'screens/household_screen.dart';
+import 'screens/family_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +34,12 @@ class CocoHomeApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: const AuthWrapper(),
+      routes: {
+        '/expenses': (context) => const ExpensesScreen(),
+        '/whiteboard': (context) => const WhiteboardScreen(),
+        '/households': (context) => const HouseholdScreen(),
+        '/families': (context) => const FamilyScreen(),
+      },
     );
   }
 }

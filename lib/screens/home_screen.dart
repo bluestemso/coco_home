@@ -50,6 +50,28 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                     
+                    // Households Card
+                    _buildNavigationCard(
+                      context: context,
+                      icon: Icons.home,
+                      title: 'Households',
+                      description: 'Manage shared living spaces',
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/households');
+                      },
+                    ),
+                    
+                    // Families Card
+                    _buildNavigationCard(
+                      context: context,
+                      icon: Icons.family_restroom,
+                      title: 'Families',
+                      description: 'Organize family groups',
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/families');
+                      },
+                    ),
+                    
                     // Whiteboard Card
                     _buildNavigationCard(
                       context: context,
