@@ -13,6 +13,7 @@ Expense _$ExpenseFromJson(Map<String, dynamic> json) => Expense(
       date: Expense._dateTimeFromTimestamp(json['date'] as Timestamp),
       paidBy: json['paidBy'] as String,
       splitWith: json['splitWith'] as String,
+      category: json['category'] as String,
     );
 
 Map<String, dynamic> _$ExpenseToJson(Expense instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$ExpenseToJson(Expense instance) => <String, dynamic>{
       'date': Expense._dateTimeToTimestamp(instance.date),
       'paidBy': instance.paidBy,
       'splitWith': instance.splitWith,
+      'category': instance.category,
     };

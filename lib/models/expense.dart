@@ -12,6 +12,7 @@ class Expense {
   final DateTime date;
   final String paidBy;
   final String splitWith;
+  final String category;
 
   const Expense({
     required this.id,
@@ -20,6 +21,7 @@ class Expense {
     required this.date,
     required this.paidBy,
     required this.splitWith,
+    required this.category,
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) => _$ExpenseFromJson(json);
