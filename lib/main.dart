@@ -7,12 +7,22 @@ import 'screens/expenses_screen.dart';
 import 'screens/whiteboard_screen.dart';
 import 'screens/household_screen.dart';
 import 'screens/family_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
+late FirebaseAnalytics analytics;
+late FirebaseCrashlytics crashlytics;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  analytics = FirebaseAnalytics.instance;
+  crashlytics = FirebaseCrashlytics.instance;
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  
   runApp(const CocoHomeApp());
 }
 
@@ -34,6 +44,9 @@ class CocoHomeApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: const AuthWrapper(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       routes: {
         '/expenses': (context) => const ExpensesScreen(),
         '/whiteboard': (context) => const WhiteboardScreen(),

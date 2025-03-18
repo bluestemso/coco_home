@@ -1,4 +1,4 @@
-package com.example.coco_home
+package solutions.bluestem.coco_home
 
 import io.flutter.embedding.android.FlutterActivity
 

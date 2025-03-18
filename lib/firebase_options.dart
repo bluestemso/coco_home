@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCg21ds-pW7qimjdpYs49FL1wQMMCfPldU',
-    appId: '1:786953078927:android:baa40faa3de045553288fa',
+    appId: '1:786953078927:android:7206f714a0d258813288fa',
     messagingSenderId: '786953078927',
     projectId: 'coco-home-698d0',
     storageBucket: 'coco-home-698d0.firebasestorage.app',
@@ -66,10 +66,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDgUb0rpFJGO6JV1krn0iVs4DABZ4eLViQ',
-    appId: '1:786953078927:ios:3e470988301e5c0e3288fa',
+    appId: '1:786953078927:ios:025726900dc7d5513288fa',
     messagingSenderId: '786953078927',
     projectId: 'coco-home-698d0',
     storageBucket: 'coco-home-698d0.firebasestorage.app',
-    iosBundleId: 'com.example.cocoHome',
+    iosBundleId: 'solutions.bluestem.cocoHome',
   );
+
 }

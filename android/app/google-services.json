@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:786953078927:android:baa40faa3de045553288fa",
+        "mobilesdk_app_id": "1:786953078927:android:7206f714a0d258813288fa",
         "android_client_info": {
-          "package_name": "com.example.coco_home"
+          "package_name": "solutions.bluestem.coco_home"
         }
       },
       "oauth_client": [],
